@@ -1,0 +1,18 @@
+Menu:
+	- rozpoczecie gry (przejscie do gry)
+	- najlepszy wynik (wyswietlenie najlepszego wyniku i jego nicku)
+	- autorzy (wyswietlanie)
+
+Funkcjonalności do dzialanie gry:
+	- losowanie poczatkowych pozycji wychodzacych punktów, ich wartosci i czasu pojawiania
+	- przesuwanie obiektów do zlapania
+	- przełączanie między liniami (w górę /  w dół) postaci za pomocą przycisku aby moc łapać
+	- zliczenie punktow za chwytanie obiektów
+	- zapis nicku przy pobiciu najlepszego wyniku
+	- zakonczenie gry w momencie nie zebrania trzech obiektow
+	- przyspieszenie na kazdym poziomie
+	- generowanie symboli(ksztalt)i wyswietlanie ich
+
+Na następne zajecia postarmay się przygotować:
+	- Całe menu
+	- generowanie symboli(ksztalt) i wyswietlanie ich
