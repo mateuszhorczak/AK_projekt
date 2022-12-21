@@ -1,0 +1,3 @@
+/home/mateusz/CLionProjects/AK_projekt/cmake-build-debug/CMakeFiles/AK_projekt.dir
+/home/mateusz/CLionProjects/AK_projekt/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/mateusz/CLionProjects/AK_projekt/cmake-build-debug/CMakeFiles/rebuild_cache.dir
