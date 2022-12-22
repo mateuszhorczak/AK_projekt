@@ -1,7 +1,7 @@
 Menu:
 	- rozpoczecie gry (przejscie do gry)
-	- najlepszy wynik (wyswietlenie najlepszego wyniku i jego nicku)
-	- autorzy (wyswietlanie)
+	- najlepszy wynik (wyswietlenie najlepszego wyniku i jego nicku) DONE
+	- autorzy (wyswietlanie) DONE
 
 Funkcjonalności do dzialanie gry:
 	- losowanie poczatkowych pozycji wychodzacych punktów, ich wartosci i czasu pojawiania

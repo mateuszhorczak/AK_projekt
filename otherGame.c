@@ -41,13 +41,13 @@ void desc(void);
 void authors(void);
 
 // autorzy
-void highscore(void);
+void highScore(void);
 
 // najlepsze wyniki
 void levelScreen(int);
 
 // ekran poziomu
-void saveHighscore(int); // zapis nicku i punktacji gracza
+void saveHighScore(int); // zapis nicku i punktacji gracza
 void writeText(unsigned char *); // wypisanie na ekran ciągu znaków
 void writeNumber(int);
 
@@ -155,7 +155,7 @@ void menu(void) {
                 option = 2;
                 break;
             case 3: // najlepsi zawodnicy
-                highscore();
+                highScore();
                 option = 3;
                 break;
         }
@@ -222,9 +222,9 @@ void game(void) {
                 writeNumber(totalPoints);
                 for (long i = 0; i < 2000000; i++); // przerwa
                 clearDisplay();
-                saveHighscore(totalPoints); // przejście do ekranu zapisu punktów
-// saveHighscore(totalPoints); // ekran zapisu nicku i punktacji
-// if (totalPoints > highscorePoints) // jeśli wynik zalicza się do highscore
+                saveHighScore(totalPoints); // przejście do ekranu zapisu punktów
+// saveHighScore(totalPoints); // ekran zapisu nicku i punktacji
+// if (totalPoints > highscorePoints) // jeśli wynik zalicza się do highScore
 //
                 highscorePoints = totalPoints; // zapis punktacji
                 for (long i = 0; i < 2000000; i++);
@@ -319,7 +319,7 @@ void authors() {
     for (long i = 0; i < 3000000; i++);
 }
 
-void highscore(void) {
+void highScore(void) {
 // przewijana w dół lista 3 najlepszych graczy wraz z punktacją
     SEND_CMD(DD_RAM_ADDR);
     writeText("1. ");
@@ -360,7 +360,7 @@ void levelScreen(int level) {
     for (long i = 0; i < 10000; i++);
 }
 
-void saveHighscore(int points) {
+void saveHighScore(int points) {
     int letter = 0;
     // wybierana litera
     char nick[3] = {'_', '_', '_'}; // 3 literowy nick gracza
@@ -468,9 +468,10 @@ void createChars() {
         SEND_CHAR(rabbit_right_bytes[i]);
     for (int i = 0; i < 8; i++)
         SEND_CHAR(wolf_bytes[i]);
+    SEND_CMD(DD_RAM_ADDR);
 }
 
-SEND_CMD(DD_RAM_ADDR);
+
 
 void initChars() {
     createChars();
