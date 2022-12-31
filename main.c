@@ -1,6 +1,7 @@
 #include <time.h>
 #include "LCD.h"
 #include "portyLcd.h"
+#include <string.h>
 #include "notes.h" // co to ??
 #include <msp430x14x.h>
 
@@ -19,8 +20,10 @@ char highscoreNicksTab[3][3] = {{' ', ' ', ' '},
 
 //--------------------------------
 
-// TODO znaki heksadecymalne punkcikow do zbierania i awatar postaci
-
+char avatar[8] = {0x03, 0x07, 0x0E, 0x1C, 0x1C, 0x0E, 0x07, 0x03}; // lapki
+char point1[8] = {0x00, 0x00, 0x00, 0x06, 0x06, 0x00, 0x00, 0x00}; // kwadracik
+char point2[8] = {0x00, 0x00, 0x06, 0x0F, 0x0F, 0x06, 0x00, 0x00}; // koleczko
+char point3[8] = {0x00, 0x00, 0x00, 0x04, 0x0E, 0x1F, 0x00, 0x00}; // trojkacik
 //-------------------------------------------
 
 // Naglowki funkcji
@@ -92,9 +95,6 @@ __interrupt void Timer_A(void) {
 }
 
 
-void initChars(void) {
-    // TODO
-}
 
 
 void menu(void) {
@@ -327,5 +327,30 @@ int getRandomNumber(int y, int x) {
 
 
 void createChars() {
+    SEND_CMD(CG_RAM_ADDR);
+    for (int i = 0; i < 8; i++) {
+        SEND_CHAR(avatar[i]);
+    }
+    for (int i = 0; i < 8; i++) {
+        SEND_CHAR(point1[i]);
+    }
+    for (int i = 0; i < 8; i++) {
+        SEND_CHAR(point2[i]);
+    }
+    for (int i = 0; i < 8; i++) {
+        SEND_CHAR(point2[i]);
+    }
+    for (int i = 0; i < 8; i++) {
+        SEND_CHAR(point3[i]);
+    }
+    SEND_CMD(DD_RAM_ADDR);
+}
+
+
+
+void initChars(void) {
     // TODO
+    createChars();
+
+
 }
