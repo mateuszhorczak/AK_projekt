@@ -178,39 +178,27 @@ void game(void) {
     P2OUT = P2OUT | BIT1; // ustawienie bitu P2.1 na stan wysoki (dioda status gaśnie)
 // ustawienie gry
     int wPos = getRandomNumber(3, 12); // pozycja wilka (losowana w zakresie (3,12))
-    int rPos = 0;
-    // pozycja zająca
-    int rate = 60;
-    // tempo
-    int direction = 1;
-    // kierunek
-    unsigned int level = 1;
-    // poziom
-    int points = 1000;
-    // max punkty na poziom
-    int totalPoints = 0;
-    // suma punktów
-    int btnPressed = 0;
-    while {
-        (1)
-        if ((P4IN & BIT6) == 0 && btnPressed == 0) // odczytanie stanu bitu P4.6 (jeśli przycisk jest
-            wciśnięty - sprawdzenie, czy
-        gracz
-        trafił)
-        {
+    int rPos = 0; // pozycja zająca
+    int rate = 60; // tempo
+    int direction = 1; // kierunek
+    unsigned int level = 1; // poziom
+    int points = 1000; // max punkty na poziom
+    int totalPoints = 0; // suma punktów
+    int btnPressed = 0; // button pressed
+    while (1) {
+        if ((P4IN & BIT6) == 0 && btnPressed == 0) { // odczytanie stanu bitu P4.6 (jeśli przycisk jest
+                                                    //wciśnięty - sprawdzenie, czy gracz trafił)
             P1OUT = P1OUT | BIT5; // ustawienie bitu P2.1 na stan niski (dioda status świeci)
             btnPressed = 1;
             clearDisplay();
 // jeśli gracz złapał zająca (zając był w kratce przed wilkiem)
             if ((direction == 1 && rPos - 1 == wPos) || (direction == -1 && rPos + 1 == wPos)) {
-                level++;
-                // level up
+                level++; // level up
                 levelScreen(level); // wyświetlenie ekranu poziomu
                 if (rate != 1) // zmniejszenie zmiennej rate -> zwiększenie tempa gry
                     rate -= 3;
                 wPos = getRandomNumber(3, 12); // pozycja wilka (losowana w zakresie (3,12))
-                rPos = 0;
-                // pozycja zająca
+                rPos = 0; // pozycja zająca
                 direction = 1;
                 totalPoints += points; // dodanie zdobytych punktów z poziomu do ogólnej punktacji
                 points = 1000;
@@ -226,7 +214,7 @@ void game(void) {
 // saveHighScore(totalPoints); // ekran zapisu nicku i punktacji
 // if (totalPoints > highscorePoints) // jeśli wynik zalicza się do highScore
 //
-                highscorePoints = totalPoints; // zapis punktacji
+//                highscorePoints = totalPoints; // zapis punktacji
                 for (long i = 0; i < 2000000; i++);
                 break; // wyjście z pętli while -> powrót do menu
             }

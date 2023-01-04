@@ -3,7 +3,7 @@
 #include "portyLcd.h"
 #include <string.h>
 #include "notes.h" // co to ??
-#include <msp430x14x.h>
+#include "msp430x14x.h" // TODO moze zmienic trzeba bedzie "" na <>
 
 #include <time.h> // TODO chyba potrzebne ?
 #include <stdlib.h> // TODO chyba potrzebne ?
@@ -40,7 +40,7 @@ void saveHighScore(int); // zapisanie nicku i wyniku gracza
 
 void levelScreen(int); // ekran poziomu
 
-void initChars(void); // inicjacja nowych znakow
+//void initChars(void); // inicjacja nowych znakow
 
 void writeText(unsigned char *); // wypisanie na ekran ciagu znakow
 
@@ -48,7 +48,7 @@ void writeNumber(int); // wypisanie na ekran liczby
 
 int getRandomNumber(int, int); // losowanie liczy w przedziale
 
-void createChars(void); // zapisanie wygenerowanych znakow w pamieci
+void createChars(char *, int); // zapisanie wygenerowanych znakow w pamieci
 //-------------------------------------------
 
 
@@ -60,7 +60,7 @@ void main(void) {
     InitPortsLcd(); // inicjalizacja portów LCD
     InitLCD(); // inicjalizacja LCD
     clearDisplay(); // czyszczenie wyświetlacza
-    initChars(); // inicjalizacja naszych znakow
+//    initChars(); // inicjalizacja naszych znakow
 
     /* ustawienie Basic Clock Module na ACLK (zegar 8MHz) i podział częstotliwości przez 1 (8MHz) */
     BCSCTL1 |= XTS; // ACLK = LFXT1 = HF XTAL 8MHz
@@ -128,11 +128,11 @@ void menu(void) {
                 break;
             case 1: // autorzy
                 authors();
-                option = 2;
+                option = 1;
                 break;
             case 2: // najlepsi zawodnicy
                 highScore();
-                option = 3;
+                option = 2;
                 break;
         } // TODO co robi to ponizej?
     } else if ((P4IN & BIT4) == 0) { // odczytanie stanu bitu P4.4 (jeśli przycisk jest wciśnięty)
@@ -152,6 +152,53 @@ void menu(void) {
 
 void game(void) {
     // TODO
+    P2OUT = P2OUT | BIT1; // ustawienie bitu P2.1 na stan wysoki (dioda status gaśnie)
+    // Ustawienia gry TODO wszystko ma byc gdy guzik jest puszczony by lepiej dzialalo
+    int playerPosition = 1; // pozycja gracza
+    int boostPosition = 12; // pozycja punktu do zebrania
+    int rate = 60; // tempo
+    int level = 1; // poziom
+    int points = 0; // punkty
+    int totalPoints = 0; // suma punktow
+    int life = 3; // zycia - traci jak nie zlapie punktu
+//    int buttonPressed = 0; // wcisniecie przycisku
+
+    while (1) {
+        SEND_CHAR(' ');
+        createChars(avatar, 1);
+        createChars(point1, 2);
+        createChars(point2, 3);
+        createChars(point3, 4);
+
+
+
+
+
+
+
+
+
+
+        if ((P4IN & BIT6) == 0) { // jesli przycisk do lapania wcisniety sprawdzenie czy gracz zlapal
+            while ((P4IN & BIT6) == 0) { // dopoki nie pusci przycisku TODO moze bedzie trzeba dodac  warunek && buttonPressed = 0
+                // w srodku chyba nic nie trzeba TODO sprawdzic
+            }
+            P1OUT = P1OUT | BIT5; // ustawienie bitu P2.1 na stan niski (dioda status świeci)
+//            buttonPressed = 1;
+            clearDisplay();
+            if (boostPosition == playerPosition + 1) { // jesli punkt jest kratke przed postacia
+                level++;
+                levelScreen(level);
+                if (rate != 0) { // zmniejszenie rate wplywa na zwiekszenie tempa gry
+                    rate -= 2;
+                }
+                totalPoints += points;
+            }
+
+
+            // TODO
+        }
+    }
 }
 
 void authors() {
@@ -326,31 +373,41 @@ int getRandomNumber(int y, int x) {
 }
 
 
-void createChars() {
-    SEND_CMD(CG_RAM_ADDR);
+void createChars(char *pattern, int n) {
+//    SEND_CMD(CG_RAM_ADDR);
+//    for (int i = 0; i < 8; i++) {
+//        SEND_CHAR(avatar[i]);
+//    }
+//    for (int i = 0; i < 8; i++) {
+//        SEND_CHAR(point1[i]);
+//    }
+//    for (int i = 0; i < 8; i++) {
+//        SEND_CHAR(point2[i]);
+//    }
+//    for (int i = 0; i < 8; i++) {
+//        SEND_CHAR(point2[i]);
+//    }
+//    for (int i = 0; i < 8; i++) {
+//        SEND_CHAR(point3[i]);
+//    }
+//    SEND_CMD(DD_RAM_ADDR);
+
+    SEND_CHAR(n-1);
+    SEND_CMD(0x40 + 8 * (n - 1));
     for (int i = 0; i < 8; i++) {
-        SEND_CHAR(avatar[i]);
+        SEND_CHAR(pattern[i]);
     }
-    for (int i = 0; i < 8; i++) {
-        SEND_CHAR(point1[i]);
-    }
-    for (int i = 0; i < 8; i++) {
-        SEND_CHAR(point2[i]);
-    }
-    for (int i = 0; i < 8; i++) {
-        SEND_CHAR(point2[i]);
-    }
-    for (int i = 0; i < 8; i++) {
-        SEND_CHAR(point3[i]);
-    }
-    SEND_CMD(DD_RAM_ADDR);
+
+
+
+
+
 }
 
 
 
-void initChars(void) {
-    // TODO
-    createChars();
-
-
-}
+//void initChars(void) {
+////    createChars();
+//
+//
+//}
