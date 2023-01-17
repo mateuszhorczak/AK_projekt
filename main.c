@@ -2,8 +2,7 @@
 #include "LCD.h"
 #include "portyLcd.h"
 #include <string.h>
-// #include "notes.h" // co to ??
-#include "msp430x14x.h" // TODO moze zmienic trzeba bedzie "" na <>
+#include "msp430x14x.h"
 
 #include <time.h> // TODO chyba potrzebne ?
 #include <stdlib.h> // TODO chyba potrzebne ?
@@ -124,41 +123,59 @@ void menu(void) {
             writeText(" > HIGHSCORE < ");
             break;
     }
-    if ((P4IN & BIT6) == 0) { // odczytanie stanu bitu P4.6 (jeśli przycisk jest wciśnięty)
-        clearDisplay();
-        switch (option) { // włączenie wybranej opcji
-            case 0: // gra
-                levelScreen(1);
-                game();
-                option = 0;
-                break;
-            case 1: // autorzy
-                authors();
-                option = 1;
-                break;
-            case 2: // najlepsi zawodnicy
-                highScore();
-                option = 2;
-                break;
-        }
-    } else if ((P4IN & BIT5) == 0) { // odczytanie stanu bitu P4.4 (jeśli przycisk jest wciśnięty)
-        if (counter % 5 == 0) {
-            counter = 0;
-            if (option != 0) {
-                option--; // dekrementacja zmiennej option - przesunięcie wskaźnika wyboru w górę
-            } else {
-                option = 2;
+    int button1 = -1;
+    int button2 = -1;
+    int button3 = -1;
+
+
+    if ((P4IN & BIT4) == 0) {
+        button1 = 0;
+    } else if ((P4IN & BIT5) == 0) {
+        button2 = 0;
+    } else if ((P4IN & BIT6)) {
+        button3 = 0;
+    }
+
+    if (button1 == 0 || button2 == 0 || button3 == 0) {   // jesli zostal klikniety ktorykolwiek z przyciskow (1, 2, 3)
+            for (;;) {
+                if ((P4IN & BIT6) == 1 && button3 == 0) { // jesli trzeci przycisk zostal puszczony i uprzednio klinkety
+                    clearDisplay();
+                    switch (option) { // włączenie wybranej opcji
+                        case 0: // gra
+                            levelScreen(1);
+                            game();
+                            option = 0;
+                            break;
+                        case 1: // autorzy
+                            authors();
+                            option = 1;
+                            break;
+                        case 2: // najlepsi zawodnicy
+                            highScore();
+                            option = 2;
+                            break;
+                    }
+                } else if ((P4IN & BIT5) == 1 && button2 == 0) { // jesli drugi przycisk zostal puszczony i uprzednio klinkety
+                    if (counter % 5 == 0) {
+                        counter = 0;
+                        if (option != 0) {
+                            option--; // dekrementacja zmiennej option - przesunięcie wskaźnika wyboru w górę
+                        } else {
+                            option = 2;
+                        }
+                    }
+                } else if ((P4IN & BIT4) == 1 && button1 == 0) {    // jesli pierwszy przycisk zostal puszczony i uprzednio klinkety
+                    if (counter % 5 == 0) {
+                        counter = 0;
+                        if (option != 3) {
+                            option++; // inkrementacja zmiennej option - przesunięcie wskaźnika wyboru w dół
+                        } else {
+                            option = 0;
+                        }
+                    }
+                }
             }
-        }
-    } else if ((P4IN & BIT4) == 0) {
-        if (counter % 5 == 0) {
-            counter = 0;
-            if (option != 3) {
-                option++; // inkrementacja zmiennej option - przesunięcie wskaźnika wyboru w dół
-            } else {
-                option = 0;
-            }
-        }
+
     }
 }
 
@@ -240,10 +257,10 @@ void game(void) {   //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym z
 
            if (line == 1) {    // zamazanie w odpowiedniej linii i miejscu starego znaku boosta
                 SEND_CMD(DD_RAM_ADDR + boostPosition + 1); // wybieranie pozycji do wyswietlenia - linia 1
-            } else {
-                SEND_CMD(DD_RAM_ADDR2 + boostPosition + 1); // wybieranie pozycji do wyswietlenia - linia 2
-            }
-            SEND_CHAR(' '); // zamazanie poprzedniej pozycji boosta TODO check
+           } else {
+               SEND_CMD(DD_RAM_ADDR2 + boostPosition + 1); // wybieranie pozycji do wyswietlenia - linia 2
+           }
+           SEND_CHAR(' '); // zamazanie poprzedniej pozycji boosta TODO check
 
 
             if (line == 1) {    // wyswietlanie w odpowiedniej linii przesuwajacego sie boosta
@@ -283,19 +300,19 @@ void game(void) {   //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym z
 
 
 
-            if ((P4IN & BIT6) == 1) {   // jesli puszcze przycisk
+            if ((P4IN & BIT6) == 1 && buttonPressed == 0) {   // jesli zostanie puszczony przycisk (gdy uprzednio zostal klikniety)
                 buttonPressed = 1;      // odnotowuje to i sprawdzam czy zlapalem punkt
-                break;
+                break;  // przestaje przemieszczac boosta
             }
 
             if (boostPosition <= playerPosition) {  // boost przelecial bohatera, za pozno klikniety przycisk
-                break;
+                break;  // przestaje przemieszczac boosta
             }
 
         }
 
         P1OUT ^= BIT5; // ustawienie bitu P2.1 na stan niski (dioda status świeci)
-        clearDisplay();
+        clearDisplay(); // czyszczenie wyswietlacza
 
         if (boostPosition == playerPosition + 1) { // jesli punkt jest kratke przed postacia (jesli zlapany)
             totalPoints += (pointsBoost * typeOfPoint); // inkrementacja punktow o bazowe punkty * jego rodzaj (wage)
