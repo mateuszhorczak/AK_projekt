@@ -23,6 +23,7 @@ char avatar[8] = {0x03, 0x07, 0x0E, 0x1C, 0x1C, 0x0E, 0x07, 0x03}; // lapki
 char point1[8] = {0x00, 0x00, 0x00, 0x06, 0x06, 0x00, 0x00, 0x00}; // kwadracik
 char point2[8] = {0x00, 0x00, 0x06, 0x0F, 0x0F, 0x06, 0x00, 0x00}; // koleczko
 char point3[8] = {0x00, 0x00, 0x00, 0x04, 0x0E, 0x1F, 0x00, 0x00}; // trojkacik
+char heart[8] = {0x00, 0x0A, 0x1F, 0x1F, 0x0E, 0x04, 0x00,  0x00};  // serce
 //-------------------------------------------
 
 // Naglowki funkcji
@@ -95,11 +96,11 @@ __interrupt void Timer_A(void) {
 
 
 void menu(void) {
-    // ------------------------- STEROWANIE: ---------------------
-    // 1 przycisk: przewija liste menu w dol
-    // 2 przycisk: przewija liste menu w gore
-    // 3 przycisk: wybiera opcje
-    // ------------------------------------------------------------
+// ------------------------- STEROWANIE: ---------------------
+// 1 przycisk: przewija liste menu w dol
+// 2 przycisk: przewija liste menu w gore
+// 3 przycisk: wybiera opcje
+// ------------------------------------------------------------
     switch (option) { // przesuwanie wskaźnika wyboru zależne od zmiennej option
         case 0:
             clearDisplay();
@@ -123,92 +124,94 @@ void menu(void) {
             writeText(" > HIGHSCORE < ");
             break;
     }
-    int button1 = -1;
-    int button2 = -1;
-    int button3 = -1;
+//int button1 = -1;
+//int button2 = -1;
+//int button3 = -1;
 
 
-    if ((P4IN & BIT4) == 0) {
-        button1 = 0;
-    } else if ((P4IN & BIT5) == 0) {
-        button2 = 0;
-    } else if ((P4IN & BIT6)) {
-        button3 = 0;
-    }
+// if ((P4IN & BIT4) == 0) {
+// button1 = 0;
+/// } else if ((P4IN & BIT5) == 0) {
+// button2 = 0;
+// } else if ((P4IN & BIT6)) {
+// button3 = 0;
+// }
 
-    if (button1 == 0 || button2 == 0 || button3 == 0) {   // jesli zostal klikniety ktorykolwiek z przyciskow (1, 2, 3)
-            for (;;) {
-                if ((P4IN & BIT6) == 1 && button3 == 0) { // jesli trzeci przycisk zostal puszczony i uprzednio klinkety
-                    clearDisplay();
-                    switch (option) { // włączenie wybranej opcji
-                        case 0: // gra
-                            levelScreen(1);
-                            game();
-                            option = 0;
-                            break;
-                        case 1: // autorzy
-                            authors();
-                            option = 1;
-                            break;
-                        case 2: // najlepsi zawodnicy
-                            highScore();
-                            option = 2;
-                            break;
-                    }
-                } else if ((P4IN & BIT5) == 1 && button2 == 0) { // jesli drugi przycisk zostal puszczony i uprzednio klinkety
-                    if (counter % 5 == 0) {
-                        counter = 0;
-                        if (option != 0) {
-                            option--; // dekrementacja zmiennej option - przesunięcie wskaźnika wyboru w górę
-                        } else {
-                            option = 2;
-                        }
-                    }
-                } else if ((P4IN & BIT4) == 1 && button1 == 0) {    // jesli pierwszy przycisk zostal puszczony i uprzednio klinkety
-                    if (counter % 5 == 0) {
-                        counter = 0;
-                        if (option != 3) {
-                            option++; // inkrementacja zmiennej option - przesunięcie wskaźnika wyboru w dół
-                        } else {
-                            option = 0;
-                        }
-                    }
-                }
+//if (button1 == 0 || button2 == 0 || button3 == 0) { // jesli zostal klikniety ktorykolwiek z przyciskow (1, 2, 3)
+//for (;;) {
+    if ((P4IN & BIT6) == 0) { // jesli trzeci przycisk zostal puszczony i uprzednio klinkety
+        clearDisplay();
+        switch (option) { // włączenie wybranej opcji
+            case 0: // gra
+                levelScreen(1);
+                game();
+                option = 0;
+                break;
+            case 1: // autorzy
+                authors();
+                option = 1;
+                break;
+            case 2: // najlepsi zawodnicy
+                highScore();
+                option = 2;
+                break;
+        }
+    } else if ((P4IN & BIT5) == 0) { // jesli drugi przycisk zostal puszczony i uprzednio klinkety
+        if (counter % 5 == 0) {
+            counter = 0;
+            if (option != 0) {
+                option--; // dekrementacja zmiennej option - przesunięcie wskaźnika wyboru w górę
+            } else {
+                option = 2;
             }
-
+        }
+    } else if ((P4IN & BIT4) == 0) { // jesli pierwszy przycisk zostal puszczony i uprzednio klinkety
+        if (counter % 5 == 0) {
+            counter = 0;
+            if (option != 3) {
+                option++; // inkrementacja zmiennej option - przesunięcie wskaźnika wyboru w dół
+            } else {
+                option = 0;
+            }
+        }
     }
+//}
+
+//}
 }
 
-void game(void) {   //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym znakiem serduszka
-    // ------------------------- STEROWANIE: ---------------------
-    // 1 przycisk: skierowanie postaci do dolu
-    // 2 przycisk: skierowanie postaci do gory
-    // 3 przycisk: chwytanie punktow
-    // 4 przycisk: wyjscie do MENU
-    // ------------------------------------------------------------
+void game(void) { //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym znakiem serduszka
+// ------------------------- STEROWANIE: ---------------------
+// 1 przycisk: skierowanie postaci do dolu
+// 2 przycisk: skierowanie postaci do gory
+// 3 przycisk: chwytanie punktow
+// 4 przycisk: wyjscie do MENU
+// ------------------------------------------------------------
     P2OUT = P2OUT | BIT1; // ustawienie bitu P2.1 na stan wysoki (dioda status gaśnie)
     int playerPosition = 1; // pozycja gracza wrzerz od lewej
-    int playerHeight = 1;   // pozycja gracza 1 - gorna linia; 2 - dolna linia
+    int playerHeight = 1; // pozycja gracza 1 - gorna linia; 2 - dolna linia
     int boostPosition = 12; // pozycja punktu do zebrania
     int rate = 60; // tempo
     int level = 1; // poziom
     int pointsBoost = 10; // punkty za boost (sa pozniej mnozone w zaleznosci od rodzaju boosta)
     int totalPoints = 0; // suma punktow
     int life = 3; // zycia - traci jak nie zlapie punktu
-    int caughtPoints = 0;   // zlapane punkty na danym poziomie trudnosci
-    int buttonPressed = -1; // wcisniecie przycisku 1 - nie wcisniety ; 0 - wcisniety; -1 - na starcie
-    clearDisplay();     // czysci wyswietlacz
+    int caughtPoints = 0; // zlapane punkty na danym poziomie trudnosci
+    char lifeChar = '3';
+    int buttonPressed = 0; // czy wcisnieto przycisk do lapania punktow 0 - nie, 1 - tak
+//int buttonPressed = -1; // wcisniecie przycisku 1 - nie wcisniety ; 0 - wcisniety; -1 - na starcie
+    clearDisplay(); // czysci wyswietlacz
     while (1) {
-        // ------ wyswietlanie znakow   TODO nie usuwac tego na razie bo przydatna sciagawka
-//        SEND_CMD(DD_RAM_ADDR + 1); //0x80
-//        createChars(avatar, 1);
-//        SEND_CMD(DD_RAM_ADDR + 2); //0x80
-//        createChars(point1, 2);
-//        SEND_CMD(DD_RAM_ADDR + 3); //0x80
-//        createChars(point2, 3);
-//        SEND_CMD(DD_RAM_ADDR + 4); //0x80
-//        createChars(point3, 4);
-        //-------------
+// ------ wyswietlanie znakow TODO nie usuwac tego na razie bo przydatna sciagawka
+// SEND_CMD(DD_RAM_ADDR + 1); //0x80
+// createChars(avatar, 1);
+// SEND_CMD(DD_RAM_ADDR + 2); //0x80
+// createChars(point1, 2);
+// SEND_CMD(DD_RAM_ADDR + 3); //0x80
+// createChars(point2, 3);
+// SEND_CMD(DD_RAM_ADDR + 4); //0x80
+// createChars(point3, 4);
+//-------------
         for (long i = 0; i < 3000000; i++); // odczekanie
 
         SEND_CMD(DD_RAM_ADDR + playerPosition); // wybranie dobrej pozycji dla avatara
@@ -217,25 +220,25 @@ void game(void) {   //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym z
         boostPosition = 12; // pozycja wyjsciowa boosta - skrajna z prawej
 
 
-
-        int line = getRandomNumber(1, 3);    // losuje liczbe od 1 do 2
+        // losowanie linii na ktorej pojawi sie boost
+        int line = getRandomNumber(1, 3); // losuje liczbe od 1 do 2
         if (line == 1) {
             SEND_CMD(DD_RAM_ADDR + boostPosition); // wybieranie pozycji do wyswietlenia - linia 1
         } else {
             SEND_CMD(DD_RAM_ADDR2 + boostPosition); // wybieranie pozycji do wyswietlenia - linia 2
         }
 
-        int typeOfPoint = getRandomNumber(1, 11);    // losuje liczbe od 1 do 11
+        // losowanie jaki to bedzie boost
+        int typeOfPoint = getRandomNumber(1, 11); // losuje liczbe od 1 do 10
         if (typeOfPoint >= 1 && typeOfPoint <= 5) {
-            typeOfPoint = 1;    // 50 % szansy, mnoznik *1
+            typeOfPoint = 1; // 50 % szansy, mnoznik *1
         } else if (typeOfPoint >= 6 && typeOfPoint <= 8) {
-            typeOfPoint = 2;    // 30% szansy, mnoznik *2
+            typeOfPoint = 2; // 30% szansy, mnoznik *2
         } else {
-            typeOfPoint = 3;    // 20% szansy, mnoznik *3
+            typeOfPoint = 3; // 20% szansy, mnoznik *3
         }
 
-
-
+        // wyswietlenie odpowiedniego boosta na pozycji startowej
         if (typeOfPoint == 1) {
             createChars(point1, 2); // wyswietlanie sie boosta 1 na pozycji startowej
         } else if (typeOfPoint == 2) {
@@ -244,32 +247,37 @@ void game(void) {   //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym z
             createChars(point3, 4); // wyswietlanie sie boosta 3 na pozycji startowej
         }
 
-        for (int i = boostPosition; i > 0; --i) {   // przesuwa boosty w lewo
-            for (long j = 0; j < 3000000; j++); // odczekanie TODO uzaleznic oczekiwanie (szybkosc przesuwania sie) od zmiennej rate (timer A)
+        for (int boostPosition = 12; boostPosition > 0; --boostPosition) { // wizualizacja i dzialanie polegajace na przemieszczaniu sie boosta w strone postaci
+            for (long j = 0; j < 1000000; j++); // odczekanie TODO uzaleznic oczekiwanie (szybkosc przesuwania sie) od zmiennej rate (timer A)
+
+            lifeChar = life + 48;   // konwersja liczby zyc na chara do wyswietlenia jej
+            SEND_CMD(DD_RAM_ADDR + 14); // wybranie 14 pozycji na pierwszej linii TODO check czy dziala
+            createChars(heart, 5);  // wyslanie serca
+            SEND_CMD(DD_RAM_ADDR + 15); // wybranie 15 pozycji na pierwszej linii
+            SEND_CHAR(lifeChar);    // wyslanie liczby serc
 
             if ((P4IN & BIT7) == 0) { // wyjscie - zakonczenie gry (trzeba bedzie przytrzymac przez chwile by wyszlo)
                 return;
             }
 
-            if ((P4IN & BIT6) == 0) {   // jesli klikne przycisk
-                buttonPressed = 0;      // odnotowuje to i zlapie przy puszczeniu klawisza
-            }
-
-           if (line == 1) {    // zamazanie w odpowiedniej linii i miejscu starego znaku boosta
+//if ((P4IN & BIT6) == 0) { // jesli klikne przycisk
+// buttonPressed = 0; // odnotowuje to i zlapie przy puszczeniu klawisza
+//}
+            if (line == 1) { // zamazanie w odpowiedniej linii i miejscu starego znaku boosta
                 SEND_CMD(DD_RAM_ADDR + boostPosition + 1); // wybieranie pozycji do wyswietlenia - linia 1
-           } else {
-               SEND_CMD(DD_RAM_ADDR2 + boostPosition + 1); // wybieranie pozycji do wyswietlenia - linia 2
-           }
-           SEND_CHAR(' '); // zamazanie poprzedniej pozycji boosta TODO check
+            } else {
+                SEND_CMD(DD_RAM_ADDR2 + boostPosition + 1); // wybieranie pozycji do wyswietlenia - linia 2
+            }
+            SEND_CHAR(' '); // zamazanie poprzedniej pozycji boosta
 
 
-            if (line == 1) {    // wyswietlanie w odpowiedniej linii przesuwajacego sie boosta
+            if (line == 1) { // wyswietlanie w odpowiedniej linii przesuwajacego sie boosta
                 SEND_CMD(DD_RAM_ADDR + boostPosition); // wybieranie pozycji do wyswietlenia - linia 1
             } else {
                 SEND_CMD(DD_RAM_ADDR2 + boostPosition); // wybieranie pozycji do wyswietlenia - linia 2
             }
 
-            if (typeOfPoint == 1) {     // po wybraniu odpowiedniej linii i miejsca wyswietlamy tam odpowiedni boost
+            if (typeOfPoint == 1) { // po wybraniu odpowiedniej linii i miejsca wyswietlamy tam odpowiedni boost
                 createChars(point1, 2); // przesuwanie sie boosta 1
             } else if (typeOfPoint == 2) {
                 createChars(point2, 3); // przesuwanie sie boosta 2
@@ -277,36 +285,34 @@ void game(void) {   //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym z
                 createChars(point3, 4); // przesuwanie sie boosta 3
             }
 
-
-            if ((P4IN & BIT4) == 0 && (playerHeight == 1)) {   // jesli klikne przycisk i gracz byl w gornej linii
+            // przesuniecie postaci w dol
+            if ((P4IN & BIT4) == 0 && (playerHeight == 1)) { // jesli klikne przycisk i gracz byl w gornej linii
                 SEND_CMD(DD_RAM_ADDR + playerPosition); // chwilowy wybor pierwszej linii
                 SEND_CHAR(' '); // zamazanie gornego avatara
 
-                playerHeight = 2;   // avatar do drugiej linii
+                playerHeight = 2; // avatar do drugiej linii
                 SEND_CMD(DD_RAM_ADDR2 + playerPosition); // wybranie dobrej pozycji dla avatara
                 createChars(avatar, 1); //wyswietlenie avatara na dolnej linii
             }
 
-            if ((P4IN & BIT5) == 0 && (playerHeight == 2)) {   // jesli klikne przycisk i gracz byl w dolnej linii
-                SEND_CMD(DD_RAM_ADDR2 + playerPosition);    // chwilowy wybor drugiej linii
+            // przesuniecie postaci w gore
+            if ((P4IN & BIT5) == 0 && (playerHeight == 2)) { // jesli klikne przycisk i gracz byl w dolnej linii
+                SEND_CMD(DD_RAM_ADDR2 + playerPosition); // chwilowy wybor drugiej linii
                 SEND_CHAR(' '); // zamazanie dolnego avatara
 
-                playerHeight = 1;   // avatar do pierwszej linii
+                playerHeight = 1; // avatar do pierwszej linii
                 SEND_CMD(DD_RAM_ADDR + playerPosition); // wybranie dobrej pozycji dla avatara
                 createChars(avatar, 1); //wyswietlenie avatara na gornej linii
             }
 
 
-
-
-
-            if ((P4IN & BIT6) == 1 && buttonPressed == 0) {   // jesli zostanie puszczony przycisk (gdy uprzednio zostal klikniety)
-                buttonPressed = 1;      // odnotowuje to i sprawdzam czy zlapalem punkt
-                break;  // przestaje przemieszczac boosta
+            if ((P4IN & BIT6) == 0) { // jesli zostanie wcisniety przycisk
+                buttonPressed = 1;
+                break; // przestaje przemieszczac boosta
             }
 
-            if (boostPosition <= playerPosition) {  // boost przelecial bohatera, za pozno klikniety przycisk
-                break;  // przestaje przemieszczac boosta
+            if (boostPosition <= playerPosition) { // boost przelecial bohatera, za pozno klikniety przycisk
+                break; // przestaje przemieszczac boosta
             }
 
         }
@@ -314,39 +320,37 @@ void game(void) {   //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym z
         P1OUT ^= BIT5; // ustawienie bitu P2.1 na stan niski (dioda status świeci)
         clearDisplay(); // czyszczenie wyswietlacza
 
-        if (boostPosition == playerPosition + 1) { // jesli punkt jest kratke przed postacia (jesli zlapany)
+
+        // TODO zrobic test bez klikania przyciskow czy przechodzi dalej
+        if (buttonPressed == 1 && line == playerPosition && (boostPosition > playerPosition && boostPosition < playerPosition + 5)) { // jesli punkt jest kratke przed postacia (jesli zlapany) i jest w dobrej linii
             totalPoints += (pointsBoost * typeOfPoint); // inkrementacja punktow o bazowe punkty * jego rodzaj (wage)
             caughtPoints++; // inkrementacja zdobytych na tym poziomie punktow
-            if (caughtPoints == 3) {    // jesli zbierze 3 boosty
-                caughtPoints = 0;   // przy wejsciu na nowy level zebrane boosty sie zeruja
+            if (caughtPoints == 3) { // jesli zbierze 3 boosty
+                caughtPoints = 0; // przy wejsciu na nowy level zebrane boosty sie zeruja
                 pointsBoost += 2; // przy wejsciu na nowy poziom inkrementacja wspolczynnika punktow o 2
-                level++;    // inkrementacja levelu
+                level++; // inkrementacja levelu
                 levelScreen(level); // wyswietlenie nowego levelu
-                if (rate != 1) { // zmniejszenie rate wplywa na zwiekszenie tempa gry
+                if (rate != 1) { // zmniejszenie rate wplywa na zwiekszenie tempa gry TODO
                     rate -= 3;
                 }
             }
-        } else {    // nie udalo sie zlapac boosta
-            life--;     // dekrementacja ilosci zyc
-            if (life > 0) {     // jesli gracz ma wciaz zycia
-                levelScreen(level);     // wyswietlenie jeszcze raz numeru tego samego levelu
-            } else {    // jesli gracz nie ma juz zyc - koniec gry
-                SEND_CMD(DD_RAM_ADDR);  // wysylanie danych na gorna linie wyswietlacza
+        } else { // jesli nie udalo sie zlapac boosta
+            life--; // dekrementacja ilosci zyc
+            if (life > 0) { // jesli gracz ma wciaz zycia
+                levelScreen(level); // wyswietlenie jeszcze raz numeru tego samego levelu
+            } else { // jesli gracz nie ma juz zyc - koniec gry
+                SEND_CMD(DD_RAM_ADDR); // wysylanie danych na gorna linie wyswietlacza
                 writeText("GAME OVER"); // wyswietlenie GAME OVER
                 SEND_CMD(DD_RAM_ADDR2); // wysylanie danych na dolna linie wyswietlacza
                 writeText("PTS: "); // wyswietlenie PTS: (Points:)
-                writeNumber(totalPoints);   // wyswietlenie zdobytej liczby puntków
-                for (long i = 0; i < 2000000; i++); // przerwa na ogladanie wyniku
+                writeNumber(totalPoints); // wyswietlenie zdobytej liczby puntków
+                for (long i = 0; i < 5000000; i++); // przerwa na ogladanie wyniku
                 clearDisplay(); // czysci wyswietlacz
                 return; // powrot do menu
             }
         }
-        buttonPressed = -1; // przywrocenie zmiennej od przycisku  do pozycji startowej
-        boostPosition = 12; // przywracam pozycje boosta do pozycji startowej
-
-
-
-
+        boostPosition = 12; // przywrocenie pozycji boosta do pozycji startowej
+        buttonPressed = 0; // zresetowanie informacji o wcisnietym przycisku
     }
 }
 
@@ -430,7 +434,7 @@ void writeNumber(int x) {
 void levelScreen(int level) {
     writeText("LEVEL "); // wypisanie numeru poziomu
     writeNumber(level);
-    for (long i = 0; i < 10000; i++);
+    for (long i = 0; i < 10000000; i++);
     clearDisplay();
 }
 
@@ -518,14 +522,14 @@ void saveHighScore(int points) {
 
 int getRandomNumber(int y, int x) {
     srand(time(0));
-    int num = (rand() % (x - y + 1)) + y;
+    int num = (rand() % (x - y + 1)) + y;   // zwraca pseudolosowa wartosc z zakresu <x, y)
     return num;
 }
 
 
 void createChars(char *pattern, int n) {
-    SEND_CHAR(n - 1);
-    SEND_CMD(0x40 + 8 * (n - 1));
+    SEND_CHAR(n - 1);   // wybiera n-1 pozycje z linii
+    SEND_CMD(0x40 + 8 * (n - 1));   // wrzuca na LCD znak wlasny
     for (int i = 0; i < 8; i++) {
         SEND_CHAR(pattern[i]);
     }
@@ -533,10 +537,3 @@ void createChars(char *pattern, int n) {
 
 }
 
-
-
-//void initChars(void) {
-//// createChars();
-//
-//
-//}
