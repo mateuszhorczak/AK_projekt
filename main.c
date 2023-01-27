@@ -306,8 +306,9 @@ void game(void) { //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym zna
             }
 
 
-            if ((P4IN & BIT6) == 0) { // jesli zostanie wcisniety przycisk
-                buttonPressed = 1;
+            if (playerPosition == boostPosition + 1/*TODO usunac to z lewej po testach*/
+            /*(P4IN & BIT6) == 0 TODO po testach odkomentowac*/) { // jesli zostanie wcisniety przycisk
+                /*buttonPressed = 1; TODO po testach odkomentowac*/
                 break; // przestaje przemieszczac boosta
             }
 
@@ -322,7 +323,8 @@ void game(void) { //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym zna
 
 
         // TODO zrobic test bez klikania przyciskow czy przechodzi dalej
-        if (buttonPressed == 1 && line == playerPosition && (boostPosition > playerPosition && boostPosition < playerPosition + 5)) { // jesli punkt jest kratke przed postacia (jesli zlapany) i jest w dobrej linii
+        if (/*buttonPressed == 1 && TODO po testach odkomentowac*/
+        line == playerPosition && (boostPosition > playerPosition && boostPosition < playerPosition + 5)) { // jesli punkt jest kratke przed postacia (jesli zlapany) i jest w dobrej linii
             totalPoints += (pointsBoost * typeOfPoint); // inkrementacja punktow o bazowe punkty * jego rodzaj (wage)
             caughtPoints++; // inkrementacja zdobytych na tym poziomie punktow
             if (caughtPoints == 3) { // jesli zbierze 3 boosty
@@ -350,7 +352,7 @@ void game(void) { //TODO opcjonalnie wyswietlanie gdzies zyc, moze z wlasnym zna
             }
         }
         boostPosition = 12; // przywrocenie pozycji boosta do pozycji startowej
-        buttonPressed = 0; // zresetowanie informacji o wcisnietym przycisku
+        /*buttonPressed = 0; TODO po testach odkomentowac*/ // zresetowanie informacji o wcisnietym przycisku
     }
 }
 
