@@ -162,20 +162,18 @@ void game(void) {
     int playerPosition = 1; // pozycja gracza wrzerz od lewej
     int playerHeight = 1; // pozycja gracza 1 - gorna linia; 2 - dolna linia
     int boostPosition = 12; // pozycja punktu do zebrania
-    int rate = 60; // tempo
     int level = 1; // poziom
-    int tar = 0;
+    int tar = 0;    // inicjacja zmiennej ktora posluzy do odczytu wartosci z timeraA
     int pointsBoost = 10; // punkty za boost (sa pozniej mnozone w zaleznosci od rodzaju boosta)
     int totalPoints = 0; // suma punktow
     int life = 3; // zycia - traci jak nie zlapie punktu
     int caughtPoints = 0; // zlapane punkty na danym poziomie trudnosci
-    char lifeChar = '3';
-    int buttonPressed = 0; // czy wcisnieto przycisk do lapania punktow 0 - nie, 1 - tak
-//int buttonPressed = -1; // wcisniecie przycisku 1 - nie wcisniety ; 0 - wcisniety; -1 - na starcie
+    char lifeChar = '3';    // znak zyc, domyslnie jako zyc, sluzy do wyswietlenia na wyswietlaczu
+
     clearDisplay(); // czysci wyswietlacz
     while (1) {
-        tar = TAR;
-        playerHeight = 1;
+        tar = TAR;  // odczyt wartosci z licznika
+        playerHeight = 1;   // linia w ktorej pojawia sie gracz na poczatku rundy
         if (level > 90) {   // czy ukonczyles gre - jest 90 poziomow
             endGame(&totalPoints); // ekran konca gry
             return; // powrot do menu
