@@ -90,25 +90,25 @@ void menu(void) {
 // ------------------------------------------------------------
     switch (option) { // przesuwanie wskaznika wyboru zaleznie od zmiennej option
         case 0:
-            clearDisplay();
-            SEND_CMD(DD_RAM_ADDR);
-            writeText(" > GAME < ");
-            SEND_CMD(DD_RAM_ADDR2);
-            writeText("AUTHORS");
+            clearDisplay(); // czyszczenie wyswietlacza
+            SEND_CMD(DD_RAM_ADDR);  // wybranie 1 linii
+            writeText(" > GAME < ");    // wyswietlenie na wyswietlaczu
+            SEND_CMD(DD_RAM_ADDR2); // wybranie 2 linii
+            writeText("AUTHORS");   // wyswietlenie na wyswietlaczu
             break;
         case 1:
-            clearDisplay();
-            SEND_CMD(DD_RAM_ADDR);
-            writeText("GAME");
-            SEND_CMD(DD_RAM_ADDR2);
-            writeText(" > AUTHORS < ");
+            clearDisplay(); // czyszczenie wyswietlacza
+            SEND_CMD(DD_RAM_ADDR);  // wybranie 1 linii
+            writeText("GAME");  // wyswietlenie na wyswietlaczu
+            SEND_CMD(DD_RAM_ADDR2); // wybranie 2 linii
+            writeText(" > AUTHORS < "); //  wyswietlenie na wyswietlaczu
             break;
         case 2:
-            clearDisplay();
-            SEND_CMD(DD_RAM_ADDR);
-            writeText("AUTHORS");
-            SEND_CMD(DD_RAM_ADDR2);
-            writeText(" > HIGHSCORE < ");
+            clearDisplay(); // czyszczenie wyswietlacza
+            SEND_CMD(DD_RAM_ADDR);  // wybranie 1 linii
+            writeText("AUTHORS");   // wyswietlenie na wyswietlaczu
+            SEND_CMD(DD_RAM_ADDR2); // wybranie 2 linii
+            writeText(" > HIGHSCORE < ");   // wyswietlenie na wyswietlaczu
             break;
     }
 
