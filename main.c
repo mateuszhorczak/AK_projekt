@@ -59,17 +59,17 @@ void main(void) {
     InitPortsLcd(); // inicjalizacja portow LCD
     InitLCD(); // inicjalizacja LCD
     clearDisplay(); // czyszczenie wyswietlacza
-    Delayx100us(20);    // odczekanie
+    Delayx100us(20); // odczekanie
 
     BCSCTL1 |= XTS; // ACLK = LFXT1 = HF XTAL 8MHz
     do {
         IFG1 &= ~OFIFG; // Czyszczenie flagi OSCFault
-        for (unsigned char i = 0xFF; i > 0; i--);   // odczekanie
-    } while ((IFG1 & OFIFG) == OFIFG);  // dopóki OSCFault jest ci1gle ustawiona
+        for (unsigned char i = 0xFF; i > 0; i--); // odczekanie
+    } while ((IFG1 & OFIFG) == OFIFG); // dopóki OSCFault jest ci1gle ustawiona
 
-    BCSCTL1 |= DIVA_0;  // ACLK=8 MHz
-    BCSCTL2 |= SELM0 | SELM1;   // MCLK= LFTX1 =ACLK
-    Delayx100us(20);    // odczekanie
+    BCSCTL1 |= DIVA_0; // ACLK=8 MHz
+    BCSCTL2 |= SELM0 | SELM1; // MCLK= LFTX1 =ACLK
+    Delayx100us(20); // odczekanie
 
 /* ustawienie Timer_A na ...kHz, a przerwanie co ...ms */
     TACTL = TASSEL_1 + MC_1 + ID_0; // wybor ACLK, ACLK / ... = ...kHz, tryb Up
@@ -91,24 +91,24 @@ void menu(void) {
     switch (option) { // przesuwanie wskaznika wyboru zaleznie od zmiennej option
         case 0:
             clearDisplay(); // czyszczenie wyswietlacza
-            SEND_CMD(DD_RAM_ADDR);  // wybranie 1 linii
-            writeText(" > GAME < ");    // wyswietlenie na wyswietlaczu
+            SEND_CMD(DD_RAM_ADDR); // wybranie 1 linii
+            writeText(" > GAME < "); // wyswietlenie na wyswietlaczu
             SEND_CMD(DD_RAM_ADDR2); // wybranie 2 linii
-            writeText("AUTHORS");   // wyswietlenie na wyswietlaczu
+            writeText("AUTHORS"); // wyswietlenie na wyswietlaczu
             break;
         case 1:
             clearDisplay(); // czyszczenie wyswietlacza
-            SEND_CMD(DD_RAM_ADDR);  // wybranie 1 linii
-            writeText("GAME");  // wyswietlenie na wyswietlaczu
+            SEND_CMD(DD_RAM_ADDR); // wybranie 1 linii
+            writeText("GAME"); // wyswietlenie na wyswietlaczu
             SEND_CMD(DD_RAM_ADDR2); // wybranie 2 linii
-            writeText(" > AUTHORS < "); //  wyswietlenie na wyswietlaczu
+            writeText(" > AUTHORS < "); // wyswietlenie na wyswietlaczu
             break;
         case 2:
             clearDisplay(); // czyszczenie wyswietlacza
-            SEND_CMD(DD_RAM_ADDR);  // wybranie 1 linii
-            writeText("AUTHORS");   // wyswietlenie na wyswietlaczu
+            SEND_CMD(DD_RAM_ADDR); // wybranie 1 linii
+            writeText("AUTHORS"); // wyswietlenie na wyswietlaczu
             SEND_CMD(DD_RAM_ADDR2); // wybranie 2 linii
-            writeText(" > HIGHSCORE < ");   // wyswietlenie na wyswietlaczu
+            writeText(" > HIGHSCORE < "); // wyswietlenie na wyswietlaczu
             break;
     }
 
@@ -116,7 +116,8 @@ void menu(void) {
         Delayx100us(255);
     }
 
-    while (((P4IN & BIT6) == BIT6) && ((P4IN & BIT5) == BIT5) && ((P4IN & BIT4) == BIT4)) { // detekcja wcisniecia dowolnego przycisku
+    while (((P4IN & BIT6) == BIT6) && ((P4IN & BIT5) == BIT5) &&
+           ((P4IN & BIT4) == BIT4)) { // detekcja wcisniecia dowolnego przycisku
     };
 
     if ((P4IN & BIT6) == 0) { // jesli trzeci przycisk zostal puszczony i uprzednio klinkety
@@ -163,18 +164,18 @@ void game(void) {
     int playerHeight = 1; // pozycja gracza 1 - gorna linia; 2 - dolna linia
     int boostPosition = 12; // pozycja punktu do zebrania
     int level = 1; // poziom
-    int tar = 0;    // inicjacja zmiennej ktora posluzy do odczytu wartosci z timeraA
+    int tar = 0; // inicjacja zmiennej ktora posluzy do odczytu wartosci z timeraA
     int pointsBoost = 10; // punkty za boost (sa pozniej mnozone w zaleznosci od rodzaju boosta)
     int totalPoints = 0; // suma punktow
     int life = 3; // zycia - traci jak nie zlapie punktu
     int caughtPoints = 0; // zlapane punkty na danym poziomie trudnosci
-    char lifeChar = '3';    // znak zyc, domyslnie jako zyc, sluzy do wyswietlenia na wyswietlaczu
+    char lifeChar = '3'; // znak zyc, domyslnie jako zyc, sluzy do wyswietlenia na wyswietlaczu
 
     clearDisplay(); // czysci wyswietlacz
     while (1) {
-        tar = TAR;  // odczyt wartosci z licznika
-        playerHeight = 1;   // linia w ktorej pojawia sie gracz na poczatku rundy
-        if (level > 90) {   // czy ukonczyles gre - jest 90 poziomow
+        tar = TAR; // odczyt wartosci z licznika
+        playerHeight = 1; // linia w ktorej pojawia sie gracz na poczatku rundy
+        if (level > 6) { // czy ukonczyles gre - jest 90 poziomow
             endGame(&totalPoints); // ekran konca gry
             return; // powrot do menu
         }
@@ -211,15 +212,15 @@ void game(void) {
             createChars(point3, 4); // wyswietlanie sie boosta 3 na pozycji startowej
         }
 
-        // dzialanie i wizualizacja polegajace na przemieszczaniu sie boosta w strone postaci
+// dzialanie i wizualizacja polegajace na przemieszczaniu sie boosta w strone postaci
         for (boostPosition = 12; boostPosition > 0; --boostPosition) {
-            for (long j = 0; j < (100000 - level * 1000); j++) {    // szybkosc gry, z kazdym levelem bedzie szybsza
-                if (!(((P4IN & BIT5) == BIT5) && ((P4IN & BIT4) == BIT4))) {    // sprawdzenie czy gracz nie wykonal ruchu
+            for (long j = 0; j < (50000 - (level * 5000)); j++) { // szybkosc gry, z kazdym levelem bedzie szybsza
+                if (!(((P4IN & BIT5) == BIT5) && ((P4IN & BIT4) == BIT4))) { // sprawdzenie czy gracz nie wykonal ruchu
                     avatarMove(&playerHeight, &playerPosition); // ruch bohatera (w gore lub w dol)
                 }
             }
 
-            // wyswietlenie znaku serca i liczby zyc jakie ma bohater w prawym gornym rogu wyswietlacza
+// wyswietlenie znaku serca i liczby zyc jakie ma bohater w prawym gornym rogu wyswietlacza
             lifeChar = life + 48; // konwersja liczby zyc na chara do wyswietlenia jej na wyswietlacz
             SEND_CMD(DD_RAM_ADDR + 14); // wybranie 14 pozycji na pierwszej linii
             createChars(heart, 5); // wyslanie serca
@@ -292,10 +293,10 @@ void game(void) {
 
 void endGame(int *totalPoints) {
     SEND_CMD(DD_RAM_ADDR); // wysylanie danych na gorna linie wyswietlacza
-    writeText("CONGRATULATIONS"); // wyswietlenie CONGRATULATIONS na wyswietlacz
+    writeText("CONGR."); // wyswietlenie CONGRATULATIONS na wyswietlacz
     SEND_CMD(DD_RAM_ADDR2); // wysylanie danych na dolna linie wyswietlacza
     writeText("PTS: "); // wyswietlenie PTS: (Points:)
-    saveHighScore(*totalPoints);    // przejscie do zapisywania wyniku
+    saveHighScore(*totalPoints); // przejscie do zapisywania wyniku
     for (long i = 0; i < 8000000; i++); // przerwa na ogladanie wyniku
     clearDisplay(); // czysci wyswietlacz
 }
@@ -305,7 +306,7 @@ void gameOver(int *totalPoints) {
     writeText("GAME OVER"); // wyswietlenie GAME OVER na wyswietlacz
     SEND_CMD(DD_RAM_ADDR2); // wysylanie danych na dolna linie wyswietlacza
     writeText("PTS: "); // wyswietlenie PTS: (Points:)
-    saveHighScore(*totalPoints);    // przejscie do zapisywania wyniku
+    saveHighScore(*totalPoints); // przejscie do zapisywania wyniku
 
     for (long i = 0; i < 5000000; i++); // przerwa na ogladanie wyniku
     clearDisplay();
@@ -322,24 +323,24 @@ void authors() {
 
     clearDisplay();
     SEND_CMD(DD_RAM_ADDR);
-    writeText("Konrad");
+    writeText("Szymon");
     SEND_CMD(DD_RAM_ADDR2);
-    writeText("Jankowski");
+    writeText("Lupinski");
     for (long i = 0; i < 3000000; i++);
 
     clearDisplay();
     SEND_CMD(DD_RAM_ADDR);
-    writeText("Szymon");
+    writeText("Konrad");
     SEND_CMD(DD_RAM_ADDR2);
-    writeText("Lupinski");
+    writeText("Jankowski");
     for (long i = 0; i < 3000000; i++);
 }
 
 
 void highScore(void) {
 // przewijana w dol‚ lista 3 najlepszych graczy wraz z punktacja
-    SEND_CMD(DD_RAM_ADDR);  // wybranie 1 linii wyswietlacza LCD
-    writeText("1. ");   // wyswietlenie 1.
+    SEND_CMD(DD_RAM_ADDR); // wybranie 1 linii wyswietlacza LCD
+    writeText("1. "); // wyswietlenie 1.
     writeNumber(highScorePointsTab[0]); // wyswietlenie punktacji
     writeText(" "); // wyswietlenie spacji
     for (int i = 0; i < 3; i++) { // wyswietlenie nicku
@@ -347,7 +348,7 @@ void highScore(void) {
     }
 
     SEND_CMD(DD_RAM_ADDR2); // wybranie 2 linii wyswietlacza LCD
-    writeText("2. ");   // wyswietlenie 2.
+    writeText("2. "); // wyswietlenie 2.
     writeNumber(highScorePointsTab[1]); // wyswietlenie punktacji
     writeText(" "); // wyswietlenie spacji
     for (int i = 0; i < 3; i++) { // wyswietlenie nicku
@@ -357,8 +358,8 @@ void highScore(void) {
     for (long i = 0; i < 3000000; i++); // odczekanie
     clearDisplay(); // czyszczenie wyswietlacza
 
-    SEND_CMD(DD_RAM_ADDR);  // wybranie 1 linii wyswietlacza LCD
-    writeText("2. ");   // wyswietlenie 2.
+    SEND_CMD(DD_RAM_ADDR); // wybranie 1 linii wyswietlacza LCD
+    writeText("2. "); // wyswietlenie 2.
     writeNumber(highScorePointsTab[1]); // wyswietlenie punktacji
     writeText(" "); // wyswietlenie spacji
     for (int i = 0; i < 3; i++) { // wyswietlenie nicku
@@ -366,7 +367,7 @@ void highScore(void) {
     }
 
     SEND_CMD(DD_RAM_ADDR2); // wybranie 2 linii wyswietlacza LCd
-    writeText("3. ");   // wyswietlenie 3.
+    writeText("3. "); // wyswietlenie 3.
     writeNumber(highScorePointsTab[2]); // wyswietlenie punktacji
     writeText(" "); // wyswietlenie spacji
     for (int i = 0; i < 3; i++) { //wyswietlenie nicku
@@ -385,17 +386,17 @@ void writeText(unsigned char *text) {
 
 
 void writeNumber(int x) {
-    if (x >= 10) {  // jesli liczba nie jest cyfra
-        writeNumber(x / 10);    // rekurencyjne wywoluje reszte z dzielenia
+    if (x >= 10) { // jesli liczba nie jest cyfra
+        writeNumber(x / 10); // rekurencyjne wywoluje reszte z dzielenia
     }
     int number = x % 10 + 48; // zamiana liczby na znak ASCII
-    SEND_CHAR(number);  // wyslanie znaku po cyfrze
+    SEND_CHAR(number); // wyslanie znaku po cyfrze
 }
 
 
 void levelScreen(int level) {
     writeText("LEVEL "); // wyswietlenie na wyswietlacz LEVEL
-    writeNumber(level);     // wyswietlenie numeru levelu
+    writeNumber(level); // wyswietlenie numeru levelu
     for (long i = 2000000; i > 0; --i); // petla odczekujaca
     clearDisplay(); // czyszczenie wyswietlacza
 }
@@ -404,13 +405,13 @@ void levelScreen(int level) {
 void saveHighScore(int points) {
     int letter = 0; // pozycja obecnej litery
     char nick[3] = {'_', '_', '_'}; // 3 literowy nick gracza
-    int current = 0;    // inicjalizacja current
+    int current = 0; // inicjalizacja current
 
-    counter = 0;    // zerowanie licznika
+    counter = 0; // zerowanie licznika
 
     while (1) {
-        counter++;  // incrementacja licznika
-        counter = counter % 30; //  licznik modulo 30
+        counter++; // incrementacja licznika
+        counter = counter % 30; // licznik modulo 30
 
         SEND_CMD(DD_RAM_ADDR2 + 5); // wybranie 5 pozycji na 2 linii
         writeNumber(points); // wyswietlenie zdobytych punktow
@@ -424,7 +425,7 @@ void saveHighScore(int points) {
         SEND_CHAR(nick[2]); // wyslanie trzeciej litery nicku
         if ((P4IN & BIT7) == 0 && nick[current] != '_') { // przycisk 4 zapisuje obecna litery i przechodzi do kolejnej
             letter = 0; // wyzerowanie litery
-            current++;  // inkrementacja current
+            current++; // inkrementacja current
 
             if (current == 3) { // jesli zostala zapisana ostatnia literka nicku to wychodzi z petli
                 SEND_CMD(DD_RAM_ADDR + 11); // wybranie 11 pozycji na 1 linii
@@ -438,11 +439,11 @@ void saveHighScore(int points) {
                 SEND_CHAR(nick[1]); // wyswietlenie 2 litery nicku
                 SEND_CHAR(' '); // wyswietlenie spacji
                 SEND_CHAR(nick[2]); // wyswietlenie trzeciej litery nicku
-                break;  // wyjscie z petli
+                break; // wyjscie z petli
             }
         } else if ((P4IN & BIT4) == 0) { // odczytanie stanu bitu P4.4 (jeĹ›li przycisk jest wciĹ›niÄ™ty)
             if (counter % 10 == 0) {
-                counter = 0;    // zerowanie licznika
+                counter = 0; // zerowanie licznika
                 if (letter != 0) {
                     letter--; // dekrementacja zmiennej letter - zmiana litery
                 }
@@ -450,7 +451,7 @@ void saveHighScore(int points) {
             }
         } else if ((P4IN & BIT5) == 0) { // odczytanie stanu bitu P4.5 (jesli przycisk jest wcisniety)
             if (counter % 10 == 0) {
-                counter = 0;    // zerowanie licznika
+                counter = 0; // zerowanie licznika
                 if (letter < 25)
                     letter++; // inkrementacja zmiennej letter - zmiana litery
                 nick[current] = letter + 65; // zmiana liczby na literke w ASCII
@@ -461,22 +462,22 @@ void saveHighScore(int points) {
 
 // zapis wyniku z punktacja i nickiem w odpowiednim miejscu na liscie
     int place = -1; // inicjalizacja zmiennej place do wybrania miejsca dla nowego wyniku
-    for (int i = 0; i < 3; i++) {   // petla iterujaca po top3
-        if (points >= highScorePointsTab[i]) {  // jesli wynik jest lepszy od ktoregos z dotychczasowych
-            place = i;  // to nowy wynik ma byc w tym miejscu
+    for (int i = 0; i < 3; i++) { // petla iterujaca po top3
+        if (points >= highScorePointsTab[i]) { // jesli wynik jest lepszy od ktoregos z dotychczasowych
+            place = i; // to nowy wynik ma byc w tym miejscu
             break;
         }
     }
     if (place != -1) {
         for (int i = 2; i > place; i--) {
-            highScorePointsTab[i] = highScorePointsTab[i - 1];  // aktualizacja tabeli wynikow
+            highScorePointsTab[i] = highScorePointsTab[i - 1]; // aktualizacja tabeli wynikow
             for (int j = 0; j < 3; j++) {
-                highScoreNicksTab[place][j] = highScoreNicksTab[i - 1][j];  // aktalizacja tabeli wynikow
+                highScoreNicksTab[place][j] = highScoreNicksTab[i - 1][j]; // aktalizacja tabeli wynikow
             }
         }
         highScorePointsTab[place] = points; // aktualizacja tabeli wynikow
         for (int j = 0; j < 3; j++) {
-            highScoreNicksTab[place][j] = nick[j];  // aktualizacja tabeli wynikow
+            highScoreNicksTab[place][j] = nick[j]; // aktualizacja tabeli wynikow
         }
     }
 }
@@ -486,36 +487,35 @@ void createChars(char *pattern, int n) {
     SEND_CHAR(n - 1); // wybiera n-1 pozycje z linii
     SEND_CMD(0x40 + 8 * (n - 1)); // wrzuca na LCD znak wlasny
     for (int i = 0; i < 8; i++) {
-        SEND_CHAR(pattern[i]);  // wyslanie znaku
+        SEND_CHAR(pattern[i]); // wyslanie znaku
     }
 }
 
 
 short avatarMove(int *playerHeight, int *playerPosition) {
 
-    // przesuniecie postaci w dol
+// przesuniecie postaci w dol
     if (((P4IN & BIT4) == 0) && (*playerHeight == 1)) { // jesli klikne przycisk i gracz byl w gornej linii
-        P2OUT ^= BIT1;  // zapalenie sie diody
+        P2OUT ^= BIT1; // zapalenie sie diody
         SEND_CMD(DD_RAM_ADDR + *playerPosition); // chwilowy wybor pierwszej linii
         SEND_CHAR(' '); // zamazanie gornego avatara
 
         *playerHeight = 2; // avatar do drugiej linii
         SEND_CMD(DD_RAM_ADDR2 + *playerPosition); // wybranie dobrej pozycji dla avatara
         createChars(avatar, 1); //wyswietlenie avatara na dolnej linii
-        Delayx100us(255);   // odczekanie
         return 1;
     }
 
-    // przesuniecie postaci w gore
+// przesuniecie postaci w gore
     else if (((P4IN & BIT5) == 0) && (*playerHeight == 2)) { // jesli klikne przycisk i gracz byl w dolnej linii
-        P2OUT ^= BIT1;  // zapalenie sie diody
+        P2OUT ^= BIT1; // zapalenie sie diody
         SEND_CMD(DD_RAM_ADDR2 + *playerPosition); // chwilowy wybor drugiej linii
         SEND_CHAR(' '); // zamazanie dolnego avatara
 
         *playerHeight = 1; // avatar do pierwszej linii
         SEND_CMD(DD_RAM_ADDR + *playerPosition); // wybranie dobrej pozycji dla avatara
         createChars(avatar, 1); //wyswietlenie avatara na gornej linii
-        Delayx100us(255);   // odczekanie
+        Delayx100us(255); // odczekanie
         return 1;
     }
     return 1;

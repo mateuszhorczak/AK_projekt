@@ -55,18 +55,6 @@ build CMakeFiles/AK_projekt.dir/main.c.o: C_COMPILER__AK_projekt_Debug /home/mat
   OBJECT_DIR = CMakeFiles/AK_projekt.dir
   OBJECT_FILE_DIR = CMakeFiles/AK_projekt.dir
 
-build CMakeFiles/AK_projekt.dir/otherGame.c.o: C_COMPILER__AK_projekt_Debug /home/mateusz/CLionProjects/AK_projekt/otherGame.c || cmake_object_order_depends_target_AK_projekt
-  DEP_FILE = CMakeFiles/AK_projekt.dir/otherGame.c.o.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu11
-  OBJECT_DIR = CMakeFiles/AK_projekt.dir
-  OBJECT_FILE_DIR = CMakeFiles/AK_projekt.dir
-
-build CMakeFiles/AK_projekt.dir/kopia.c.o: C_COMPILER__AK_projekt_Debug /home/mateusz/CLionProjects/AK_projekt/kopia.c || cmake_object_order_depends_target_AK_projekt
-  DEP_FILE = CMakeFiles/AK_projekt.dir/kopia.c.o.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu11
-  OBJECT_DIR = CMakeFiles/AK_projekt.dir
-  OBJECT_FILE_DIR = CMakeFiles/AK_projekt.dir
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target AK_projekt
@@ -75,7 +63,7 @@ build CMakeFiles/AK_projekt.dir/kopia.c.o: C_COMPILER__AK_projekt_Debug /home/ma
 #############################################
 # Link the executable AK_projekt
 
-build AK_projekt: C_EXECUTABLE_LINKER__AK_projekt_Debug CMakeFiles/AK_projekt.dir/main.c.o CMakeFiles/AK_projekt.dir/otherGame.c.o CMakeFiles/AK_projekt.dir/kopia.c.o
+build AK_projekt: C_EXECUTABLE_LINKER__AK_projekt_Debug CMakeFiles/AK_projekt.dir/main.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/AK_projekt.dir
   POST_BUILD = :
